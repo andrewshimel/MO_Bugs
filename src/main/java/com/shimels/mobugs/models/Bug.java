@@ -1,5 +1,7 @@
 package com.shimels.mobugs.models;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
 
 
@@ -11,7 +13,7 @@ public class Bug {
     @GeneratedValue
     private int id;
 
-    private String  url;
+    private String url;
 
     private String commonName;
 
@@ -21,7 +23,7 @@ public class Bug {
 
     public Bug(){}
 
-    public Bug(String commonName, String scientificName, String[] tags, String urk){
+    public Bug(String commonName, String scientificName, String[] tags, String url){
         this.commonName = commonName;
         this.scientificName = scientificName;
         this.tags = tags;

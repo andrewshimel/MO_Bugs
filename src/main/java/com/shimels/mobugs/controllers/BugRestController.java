@@ -5,7 +5,10 @@ import com.shimels.mobugs.models.data.BugRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -28,8 +31,20 @@ public class BugRestController {
         return bugRepository.findAll();
     }
 
-    @PostMapping("/bug")
-    Bug createOrSaveBug(@RequestBody Bug newBug){
+    @PostMapping(value = "/bug", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Bug createOrSaveBug(@RequestPart (value = "common") String common, @RequestPart (value = "scientific")
+            String scientific, @RequestPart (value = "image") MultipartFile image){
+        String fileName = "/var/tmp/img/" + image.getOriginalFilename();
+        try {
+            image.transferTo(new File(fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Bug newBug = new Bug();
+        newBug.setCommonName(common);
+        newBug.setScientificName(scientific);
+        newBug.setUrl(image.getOriginalFilename());
         return bugRepository.save(newBug);
     }
 
